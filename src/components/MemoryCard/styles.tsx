@@ -9,19 +9,19 @@ export const flipAnimation = keyframes`
     }
 `;
 
-export const CardImage = styled.img`
+export const CardImage = styled.img<{ $disabled: boolean }>`
   width: 300px;
   height: 300px;
   object-fit: cover;
-  cursor: pointer;
   border-radius: 10px;
   border: 1px solid #000;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  opacity: ${({ $disabled }) => ($disabled ? 0.5 : 1)};
 `;
 
 export const CardContainer = styled.div`
-  perspective: 1000px;
+  //perspective: 1000px;
   position: relative;
   display: inline-block;
-  animation: ${flipAnimation} 0.6s;
+  //animation: ${flipAnimation} 0.6s;
 `;

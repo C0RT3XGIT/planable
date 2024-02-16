@@ -1,18 +1,17 @@
-import React, { useState } from 'react';
-import CardBack from '../../assets/images/back-card.png';
+import React from 'react';
 import { CardContainer, CardImage } from './styles';
+import CardBack from '../../assets/images/back-card.png';
 
-type MemoryCardProps = React.ImgHTMLAttributes<HTMLImageElement>;
+interface MemoryCardProps {
+  isFlipped: boolean;
+  src: string;
+  disabled?: boolean;
+}
 
-const MemoryCard = ({ ...rest }: MemoryCardProps) => {
-  const [isFlipped, setFlipped] = useState(false);
-
-  const handleCardClick = () => {
-    setFlipped((prevState) => !prevState);
-  };
+const MemoryCard = ({ isFlipped, src, disabled = false }: MemoryCardProps) => {
   return (
-    <CardContainer onClick={handleCardClick}>
-      {isFlipped ? <CardImage src={CardBack} /> : <CardImage {...rest} />}
+    <CardContainer>
+      <CardImage src={isFlipped ? src : CardBack} $disabled={disabled} />
     </CardContainer>
   );
 };
