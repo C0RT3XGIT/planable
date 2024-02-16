@@ -1,5 +1,5 @@
 import React from 'react';
-import { CardContainer, CardImage } from './styles';
+import { CardImage } from './styles';
 import CardBack from '../../assets/images/back-card.png';
 
 interface MemoryCardProps {
@@ -9,11 +9,7 @@ interface MemoryCardProps {
 }
 
 const MemoryCard = ({ isFlipped, src, disabled = false }: MemoryCardProps) => {
-  return (
-    <CardContainer>
-      <CardImage src={isFlipped ? src : CardBack} $disabled={disabled} />
-    </CardContainer>
-  );
+  return <CardImage src={isFlipped ? src : CardBack} $disabled={disabled} />;
 };
 
 export default MemoryCard;

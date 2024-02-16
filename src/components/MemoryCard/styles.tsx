@@ -15,13 +15,7 @@ export const CardImage = styled.img<{ $disabled: boolean }>`
   object-fit: cover;
   border-radius: 10px;
   border: 1px solid #000;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.34);
   opacity: ${({ $disabled }) => ($disabled ? 0.5 : 1)};
-`;
-
-export const CardContainer = styled.div`
-  //perspective: 1000px;
-  position: relative;
-  display: inline-block;
-  //animation: ${flipAnimation} 0.6s;
+  transition: all 0.3s ease-in-out;
 `;

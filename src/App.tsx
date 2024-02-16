@@ -8,7 +8,13 @@ import {
   shuffleArray,
 } from './utils/dataHelpers';
 import MemoryCard from './components/MemoryCard';
-import { AppWrapper, CardWrapper, Header, MemoryGrid } from './styles';
+import {
+  ActionButton,
+  AppWrapper,
+  CardWrapper,
+  Header,
+  MemoryGrid,
+} from './styles';
 
 function App() {
   const [loadingImages, setLoadingImages] = useState<boolean>(false);
@@ -59,7 +65,7 @@ function App() {
     setFlippedCards(getFlippedCardsNextState(card));
   };
 
-  const shouldKeepVisible = (card: Card) => {
+  const shouldKeepFlipped = (card: Card) => {
     const isFlipped = flippedCards.some(
       (item) => item.uniqueId === card.uniqueId,
     );
@@ -84,6 +90,11 @@ function App() {
     }, 1000);
   };
 
+  const reinitializeGame = () => {
+    initializeMemoryCards();
+    setTries(0);
+  };
+
   useEffect(() => {
     if (isEven(flippedCards.length) && flippedCards.length > 1) {
       if (verifyCardsMatch(flippedCards)) {
@@ -95,6 +106,20 @@ function App() {
       }
     }
   }, [flippedCards]);
+
+  useEffect(() => {
+    let gameFinished: NodeJS.Timeout;
+    if (cards.length > 0 && cards.every((card) => card.isMatched)) {
+      gameFinished = setTimeout(() => {
+        alert('Congratulations! You won the game!');
+        reinitializeGame();
+      }, 1000);
+    }
+
+    return () => {
+      clearTimeout(gameFinished);
+    };
+  }, [cards]);
 
   useEffect(() => {
     initializeMemoryCards();
@@ -109,11 +134,14 @@ function App() {
       <Header>
         <h1>Planable Memory Game</h1>
         <h2>Tries: {tries}</h2>
+
+        <ActionButton onClick={reinitializeGame}>New Game</ActionButton>
       </Header>
       <MemoryGrid>
         {cards.map((card) => {
-          const isVisible = shouldKeepVisible(card);
-          const isClickable = flippedCards.length !== 2 || isVisible;
+          const isFlipped = shouldKeepFlipped(card);
+          const flippedCardsMatched = flippedCards.length === 2;
+          const isClickable = !flippedCardsMatched && !isFlipped;
           return (
             <CardWrapper
               key={card.uniqueId}
@@ -121,8 +149,8 @@ function App() {
             >
               <MemoryCard
                 src={card.url}
-                isFlipped={isVisible}
-                disabled={!isClickable}
+                isFlipped={isFlipped}
+                disabled={flippedCardsMatched && !isFlipped}
               />
             </CardWrapper>
           );
