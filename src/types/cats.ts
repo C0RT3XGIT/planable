@@ -8,4 +8,6 @@ export interface CatItem {
 export interface Card extends CatItem {
   uniqueId: number;
   isMatched: boolean;
+  isFlipped: boolean;
+  disabled: boolean;
 }

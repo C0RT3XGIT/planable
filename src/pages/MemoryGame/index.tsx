@@ -1,6 +1,6 @@
 import { CardWrapper, Header, MemoryGrid } from './styles';
 import MemoryCard from '../../components/MemoryCard';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Card, CatItem } from '../../types/cats';
 import {
   attachUniqueId,
@@ -18,6 +18,28 @@ const MemoryGame = () => {
   const [cards, setCards] = useState<Card[]>([]);
   const [flippedCards, setFlippedCards] = useState<Card[]>([]);
   const [tries, setTries] = useState<number>(0);
+
+  const shouldKeepFlipped = (card: Card) => {
+    const isFlipped = flippedCards.some(
+      (item) => item.uniqueId === card.uniqueId,
+    );
+    const isMatched = card.isMatched;
+    return isFlipped || isMatched;
+  };
+
+  const memoryCards: Card[] = useMemo(
+    () =>
+      cards.map((card) => {
+        const isFlipped = shouldKeepFlipped(card);
+        const isEnoughFlippedCards = flippedCards.length === 2;
+        return {
+          ...card,
+          isFlipped,
+          disabled: !isFlipped && isEnoughFlippedCards,
+        };
+      }),
+    [cards, flippedCards],
+  );
 
   const prepareMemoryCards = (catImages: CatItem[]) => {
     const duplicatedCatImages = duplicateArray(catImages);
@@ -59,15 +81,10 @@ const MemoryGame = () => {
   };
 
   const handleCardClick = (card: Card) => {
-    setFlippedCards(getFlippedCardsNextState(card));
-  };
+    const enoughFlippedCards = flippedCards.length === 2;
+    const isClickable = !enoughFlippedCards && !card.isFlipped;
 
-  const shouldKeepFlipped = (card: Card) => {
-    const isFlipped = flippedCards.some(
-      (item) => item.uniqueId === card.uniqueId,
-    );
-    const isMatched = card.isMatched;
-    return isFlipped || isMatched;
+    isClickable && setFlippedCards(getFlippedCardsNextState(card));
   };
 
   const markCardsAsMatched = (cardsToMark: Card[]) => {
@@ -84,7 +101,7 @@ const MemoryGame = () => {
   const resetFlippedCards = () => {
     setTimeout(() => {
       setFlippedCards([]);
-    }, 1000);
+    }, 2000);
   };
 
   const reinitializeGame = () => {
@@ -135,23 +152,18 @@ const MemoryGame = () => {
         <Button onClick={reinitializeGame}>New Game</Button>
       </Header>
       <MemoryGrid>
-        {cards.map((card) => {
-          const isFlipped = shouldKeepFlipped(card);
-          const flippedCardsMatched = flippedCards.length === 2;
-          const isClickable = !flippedCardsMatched && !isFlipped;
-          return (
-            <CardWrapper
-              key={card.uniqueId}
-              onClick={() => isClickable && handleCardClick(card)}
-            >
-              <MemoryCard
-                src={card.url}
-                isFlipped={isFlipped}
-                disabled={flippedCardsMatched && !isFlipped}
-              />
-            </CardWrapper>
-          );
-        })}
+        {memoryCards.map((card) => (
+          <CardWrapper
+            key={card.uniqueId}
+            onClick={() => handleCardClick(card)}
+          >
+            <MemoryCard
+              src={card.url}
+              isFlipped={card.isFlipped}
+              disabled={card.disabled}
+            />
+          </CardWrapper>
+        ))}
       </MemoryGrid>
     </FlexColumn>
   );
