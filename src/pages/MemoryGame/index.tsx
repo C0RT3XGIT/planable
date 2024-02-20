@@ -11,6 +11,7 @@ import {
 import { getCatImages } from '../../api/endpoints';
 import { Button } from '../../ui/Button';
 import { FlexColumn } from '../../ui/Flex';
+import { LoadingSpinner } from '../../components/LoadingSpinner';
 
 const MemoryGame = () => {
   const [loadingImages, setLoadingImages] = useState<boolean>(false);
@@ -32,7 +33,7 @@ const MemoryGame = () => {
   const initializeMemoryCards = async () => {
     try {
       setLoadingImages(true);
-      const { data: catImages } = await getCatImages({ limit: 2 });
+      const { data: catImages } = await getCatImages({ limit: 10 });
       const preparedMemoryCards = prepareMemoryCards(catImages);
       setCards(preparedMemoryCards);
     } catch (error) {
@@ -122,7 +123,7 @@ const MemoryGame = () => {
   }, []);
 
   if (loadingImages) {
-    return <div>Loading images...</div>;
+    return <LoadingSpinner />;
   }
 
   return (

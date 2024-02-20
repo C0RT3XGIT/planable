@@ -12,4 +12,4 @@ const MemoryCard = ({ isFlipped, src, disabled = false }: MemoryCardProps) => {
   return <CardImage src={isFlipped ? src : CardBack} $disabled={disabled} />;
 };
 
-export default MemoryCard;
+export default React.memo(MemoryCard);
