@@ -1,15 +1,6 @@
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 
-export const flipAnimation = keyframes`
-    from {
-        transform: rotateY(0deg);
-    }
-    to {
-        transform: rotateY(180deg);
-    }
-`;
-
-export const CardImage = styled.img<{ $disabled: boolean }>`
+export const CardImage = styled.img<{ $disabled: boolean; $rotate: boolean }>`
   width: 300px;
   height: 300px;
   object-fit: cover;
@@ -17,5 +8,7 @@ export const CardImage = styled.img<{ $disabled: boolean }>`
   border: 1px solid #000;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.34);
   opacity: ${({ $disabled }) => ($disabled ? 0.5 : 1)};
+  transform: ${({ $rotate }) =>
+    $rotate ? 'rotateY(180deg)' : 'rotateY(0deg)'};
   transition: all 0.3s ease-in-out;
 `;

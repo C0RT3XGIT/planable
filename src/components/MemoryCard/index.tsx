@@ -9,7 +9,13 @@ interface MemoryCardProps {
 }
 
 const MemoryCard = ({ isFlipped, src, disabled = false }: MemoryCardProps) => {
-  return <CardImage src={isFlipped ? src : CardBack} $disabled={disabled} />;
+  return (
+    <CardImage
+      src={isFlipped ? src : CardBack}
+      $disabled={disabled}
+      $rotate={isFlipped}
+    />
+  );
 };
 
 export default React.memo(MemoryCard);
