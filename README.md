@@ -56,9 +56,7 @@ The game follows a modular folder structure, with types, utils, api endpoints, u
     │   ├── components          # Components that implement reusable UI components from the UI/ folder and logic.
     │   ├── pages               # Pages
     │   ├── types               # TypeScript types
-    │   ├── utils               # Utility functions 
-    │   ├── integration         # End-to-end, integration tests (alternatively `e2e`)
-    │   └── unit                # Unit tests
+    │   └── utils               # Utility functions 
     └── package.json            # List of dependencies and scripts
 
 ## Known Limitations & Issues
